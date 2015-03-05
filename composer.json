@@ -1,0 +1,28 @@
+{
+    "name": "atk4/messages",
+    "type": "library",
+    "version": "4.3.x",
+    "description": "AgileToolkit universal messaging system",
+    "keywords": ["addon","atk4"],
+    "authors": [
+        {
+            "name": "Vadym Radvansky"
+        },
+        {
+            "name": "Konstantin Kolodnitsky"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "atk4\/atk4":"4.3.*@dev",
+        "nesbot/Carbon": "*"
+    },
+
+    "require-dev": {
+        "robmorgan/phinx": "*"
+    },
+
+    "autoload": {
+        "psr-0": {"atk4\\messages": "lib/"}
+    }
+}
