@@ -132,6 +132,7 @@ class Form_Message extends \Form {
             'change' => $this->js(null,'function() {'.
                     $this->js()->atk4_messages()->changeAutocompleteURL(
                         $to_field->name,
+                        $reload_field->name,
                         $reload_field->other_field->name,
                         $to_field->short_name
                     )
@@ -183,30 +184,23 @@ class Form_Message extends \Form {
         // TODO get name from DB for $this->to_id_field
         $this->to_type_field->set($this->model['to_type']);
 
-        $this->from_id_field->setModel($this->config->getTypeModelClassName($this->model['from_type']));
+
+
+        // get form url (if field reload)
+        if ($p = $_GET[$this->from_type_field->short_name]) {
+            $from_type = $p;
+        }
+        // get from form (on form submit)
+        else if ($p = $_POST[$this->from_type_field->name]) {
+            $from_type = $p;
+        }
+        // get from model (on form generation)
+        else {
+            $from_type = $this->model['from_type'];
+        }
+        $this->from_id_field->setModel($this->config->getTypeModelClassName($from_type));
+        // TODO get name from DB for $this->from_id_field
         $this->from_type_field->set($this->model['from_type']);
-
-
-
-
-
-//        // get form url (if field reload)
-//        if ($p = $_GET['partner_id']) {
-//            $partner_id = $p;
-//        }
-//        // get from form (on form submit)
-//        else if ($p = $_POST[$this->partner_field->name]) {
-//            $partner_id = $p;
-//        }
-//        // get from model (on form generation)
-//        else {
-//            $partner_id = $this->model['partner_id'];
-//        }
-//        $this->contact_field->model->addCondition('partner_id',$partner_id);
-//
-//
-//        $this->partner_field->set($partner_id);
-//        $this->contact_field->set($this->model['contact_id']);
 
     }
 

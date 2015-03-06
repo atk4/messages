@@ -30,10 +30,10 @@
         whois: function() {
             alert('atk4_messages');
         },
-        changeAutocompleteURL: function( dd_field, ac_field, type_field_name ) {
+        changeAutocompleteURL: function( dd_field, ac_field, ac_other_field, type_field_name ) {
 
             // get current autocomplete URL
-            var current_autoload_source = $( "#" + ac_field ).autocomplete( "option", "source" );
+            var current_autoload_source = $( "#" + ac_other_field ).autocomplete( "option", "source" );
 
             var new_autoload_source = "";
 
@@ -57,7 +57,12 @@
             //console.log('*****------------------------------>' + new_autoload_source);
 
             // set new autocomplete URL
-            $( "#" + ac_field ).autocomplete( "option", "source", new_autoload_source );
+            $( "#" + ac_other_field ).autocomplete( "option", "source", new_autoload_source );
+
+            // clear previous values in autoload field.
+            $( "#" + ac_field).val('');
+            $( "#" + ac_other_field).val('');
+
 
         }
 
