@@ -11,5 +11,6 @@ namespace atk4\messages;
 class CRUD_Messages extends \CRUD {
 
     public $grid_class = 'atk4/messages/Grid_Messages';
+    public $form_class = 'atk4/messages/Form_Message';
 
 }

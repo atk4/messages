@@ -65,6 +65,19 @@ class Config {
 
 
 
+//    private $form_class = 'atk4\\messages\\Form_Message';
+//
+//    public function setFormClassName($form_class) {
+//        $this->form_class = $form_class;
+//        return $this;
+//    }
+//    public function getFormClassName() {
+//        return $this->form_class;
+//    }
+
+
+
+
     private function __construct() {}
 
 }
