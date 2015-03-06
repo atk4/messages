@@ -128,7 +128,6 @@ class Form_Message extends \Form {
 
     private function addReloadOnChange(\Form_Field $to_field, \Form_Field $reload_field) {
 
-        // js | reload contact field
         $to_field->selectnemu_options = array(
             'change' => $this->js(null,'function() {'.
                     $this->js()->atk4_messages()->changeAutocompleteURL(
@@ -167,8 +166,21 @@ class Form_Message extends \Form {
 
     public function setValues() {
 
-        //exit($this->model['to_id']);
-        $this->to_id_field->setModel($this->config->getTypeModelClassName($this->model['to_type']));
+        // get form url (if field reload)
+        if ($p = $_GET[$this->to_type_field->short_name]) {
+            $to_type = $p;
+        }
+        // get from form (on form submit)
+        else if ($p = $_POST[$this->to_type_field->name]) {
+            $to_type = $p;
+        }
+        // get from model (on form generation)
+        else {
+            $to_type = $this->model['to_type'];
+        }
+
+        $this->to_id_field->setModel($this->config->getTypeModelClassName($to_type));
+        // TODO get name from DB for $this->to_id_field
         $this->to_type_field->set($this->model['to_type']);
 
         $this->from_id_field->setModel($this->config->getTypeModelClassName($this->model['from_type']));

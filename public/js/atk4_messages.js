@@ -66,29 +66,3 @@
     },$.atk4_messages._import);
 
 })(jQuery);
-
-
-
-
-/**
-
- ,'
- function() {
-                     alert($("#'.$to_field->name.'").find(":selected").attr("value"));
-
-                        var current_autoload_source = $("#'.$reload_field->other_field->name.'").autocomplete( "option", "source" );
-                        var new_autoload_source = "";
-
-                        if ( current_autoload_source.indexOf("&'.$to_field->short_name.'=") >= 0;) {
-                            // replace
-                        } else {
-                            new_autoload_source = current_autoload_source + "&'.$to_field->short_name.'=" + $("#'.$to_field->name.'").find(":selected").attr("value");
-                        }
-                        $("#'.$reload_field->other_field->name.'").autocomplete(   "option", "source" , new_autoload_source   )
-
-                     console.log($("#'.$reload_field->other_field->name.'").autocomplete(   "option", "source"    ));
-                }'
-
-
-
- */
