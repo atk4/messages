@@ -41,6 +41,11 @@ class Form_Message extends \Form {
         $private_location = $this->app->pathfinder->addLocation(array(
             'addons'=>array('../vendor/atk4'),
         ))->setBasePath('.');
+
+        //$this->onSubmit(array($this,'checkSubmit'));
+
+        $this->addHook('update',[$this,'checkSubmit']);
+
     }
 
 
@@ -121,24 +126,8 @@ class Form_Message extends \Form {
      * @return \autocomplete\Form_Field_Basic
      */
     private function addToField() {
-        $field = $this->addField('autocomplete\Form_Field_Basic','to');
+        $field = $this->addField('autocomplete\Form_Field_Basic','to_id')->setCaption('To');
         return $field;
-    }
-
-
-    private function addReloadOnChange(\Form_Field $to_field, \Form_Field $reload_field) {
-
-        $to_field->selectnemu_options = array(
-            'change' => $this->js(null,'function() {'.
-                    $this->js()->atk4_messages()->changeAutocompleteURL(
-                        $to_field->name,
-                        $reload_field->name,
-                        $reload_field->other_field->name,
-                        $to_field->short_name
-                    )
-            .'}')
-        );
-
     }
 
 
@@ -161,8 +150,37 @@ class Form_Message extends \Form {
      * @return \autocomplete\Form_Field_Basic
      */
     private function addFromField() {
-        $field = $this->addField('autocomplete\Form_Field_Basic','from');
+        $field = $this->addField('autocomplete\Form_Field_Basic','from_id')->setCaption('From');
         return $field;
+    }
+
+
+    /**
+     * Adds reload autoload field on select option in drop down field.
+     * Autoload field will send additional parameter together with search request which
+     * will help to pick up proper model to search in.
+     *
+     * You can use Config singleton of this add-on to match your custom types which mut be described in
+     * your custom message class inherited from atk4\messages\Model_Message.
+     *
+     *     Config::getInstance()->setTypeModelClassName('writer','Model_Writer');
+     *
+     * @param \Form_Field_DropDown $to_field
+     * @param \autocomplete\Form_Field_Basic $reload_field
+     */
+    private function addReloadOnChange(\Form_Field_DropDown $to_field, \autocomplete\Form_Field_Basic $reload_field) {
+
+        $to_field->selectnemu_options = array(
+            'change' => $this->js(null,'function() {'.
+                    $this->js()->atk4_messages()->changeAutocompleteURL(
+                        $to_field->name,
+                        $reload_field->name,
+                        $reload_field->other_field->name,
+                        $to_field->short_name
+                    )
+                    .'}')
+        );
+
     }
 
     public function setValues() {
@@ -177,12 +195,15 @@ class Form_Message extends \Form {
         }
         // get from model (on form generation)
         else {
-            $to_type = $this->model['to_type'];
+            $to_type = $this->model['to_type']?:$this->config->getDefaultToMessateType();
         }
 
-        $this->to_id_field->setModel($this->config->getTypeModelClassName($to_type));
-        // TODO get name from DB for $this->to_id_field
-        $this->to_type_field->set($this->model['to_type']);
+        if ($to_model = $this->config->getTypeModelClassName($to_type)) {
+            $this->to_id_field->setModel($to_model);
+            $this->to_id_field->set($this->model['to_id']);
+        }
+
+        $this->to_type_field->set($to_type);
 
 
 
@@ -196,29 +217,48 @@ class Form_Message extends \Form {
         }
         // get from model (on form generation)
         else {
-            $from_type = $this->model['from_type'];
+            $from_type = $this->model['from_type']?:$this->config->getDefaultFromMessateType();
         }
-        $this->from_id_field->setModel($this->config->getTypeModelClassName($from_type));
-        // TODO get name from DB for $this->from_id_field
-        $this->from_type_field->set($this->model['from_type']);
+
+        if ($from_model = $this->config->getTypeModelClassName($from_type)) {
+            $this->from_id_field->setModel($from_model);
+            $this->from_id_field->set($this->model['from_id']);
+        }
+
+        $this->from_type_field->set($from_type);
 
     }
 
-//    public function checkSubmit() {
+    public function checkSubmit() {
+
+//        var_dump($_POST); echo '<hr>';
 //
+//
+//        echo 'checkSubmit <br>';
+//        var_dump($this->get()); echo '<hr>';
+//
+//        $this->model->set($this->get());
+//
+//        var_dump($this->model->get()); echo '<hr>';
+//
+
+//        exit('bla');
+
+
 //        if ($this->hasElement('id')) {
 //            $this->set('id',$_GET[$this->owner->name.'_id']);
 //        }
-//
-//        $this->model->set($this->get());
-//        $this->save();
-//
+
+
+        $this->model->set($this->get());
+        $this->save();
+
 //        $succss_js = array(
 //            $this->js()->univ()->successMessage($this->success_message),
 //            $this->js()->_selector('#'.$this->crud->name)->trigger('reload'),
 //        );
 //
 //        $this->js(null,$succss_js)->univ()->closeDialog()->execute();
-//    }
+    }
 
 }

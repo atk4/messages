@@ -17,11 +17,15 @@ class Model_Message extends \SQL_Model {
 
     public $table = 'message';
 
+    protected $config;
+
     protected static $from_types = ['admin'=>'Administrator'];
     protected static $to_types = ['admin'=>'Administrator','broadcast'=>'Broadcast message'];
 
     function init(){
         parent::init();
+
+        $this->config = Config::getInstance();
 
         //$this->addField('subject');
         $this->addField('text')->type('text');
@@ -42,12 +46,13 @@ class Model_Message extends \SQL_Model {
 
     function addHooks() {
         $this->addHook('beforeSave',function($m){
-            if(!$m['from_id']) throw $m->exception('from_id is required','MissedData');
-            if(!$m['from_type']) throw $m->exception('from_type is required','MissedData');
-            if(!$m['to_type']) throw $m->exception('to_type is required','MissedData');
-            if(!$m['text']) throw $m->exception('text is required','MissedData');
-            if(!in_array($m['from_type'],static::getFromTypes())) throw $m->exception('Incorrect from_type value','IncorrectData');
-            if(!in_array($m['to_type'],static::getToTypes())) throw $m->exception('Incorrect to_type value','IncorrectData');
+            if (!$m['to_type']) throw new \Exception_ValidityCheck('required','to_type');
+            if ( $this->config->getTypeModelClassName($m['to_type']) && !$m['to_id'] ) throw new \Exception_ValidityCheck('required','to_id');
+            if (!$m['from_id']) throw new \Exception_ValidityCheck('required','from_id');
+            if (!$m['from_type']) throw new \Exception_ValidityCheck('required','from_type');
+            if (!$m['text']) throw new \Exception_ValidityCheck('required','text');
+            if (!array_key_exists($m['from_type'],static::getFromTypes())) new \Exception_ValidityCheck('Incorrect value','from_type');
+            if (!array_key_exists($m['to_type'],static::getToTypes())) new \Exception_ValidityCheck('Incorrect value','to_type');
         });
     }
 

@@ -64,6 +64,30 @@ class Config {
 
 
 
+    private $default_to_message_type = 'admin';
+
+    public function setDefaultToMessateType($message_type) {
+        $this->default_to_message_type = $message_type;
+        return $this;
+    }
+    public function getDefaultToMessateType() {
+        return $this->default_to_message_type;
+    }
+
+
+
+    private $default_from_message_type = 'admin';
+
+    public function setDefaultFromMessateType($message_type) {
+        $this->default_from_message_type = $message_type;
+        return $this;
+    }
+    public function getDefaultFromMessateType() {
+        return $this->default_from_message_type;
+    }
+
+
+
 
 //    private $form_class = 'atk4\\messages\\Form_Message';
 //
@@ -78,6 +102,6 @@ class Config {
 
 
 
-    private function __construct() {}
+    protected function __construct() {}
 
 }
