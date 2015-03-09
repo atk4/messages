@@ -179,6 +179,10 @@ class Form_Message extends \Form {
 
     }
 
+
+    /**
+     * Set values to the fields on form creation, field reload and during model saving process.
+     */
     public function setValues() {
 
         // get form url (if field reload)
