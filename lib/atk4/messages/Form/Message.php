@@ -42,10 +42,6 @@ class Form_Message extends \Form {
             'addons'=>array('../vendor/atk4'),
         ))->setBasePath('.');
 
-        //$this->onSubmit(array($this,'checkSubmit'));
-
-        $this->addHook('update',[$this,'checkSubmit']);
-
     }
 
 
@@ -227,38 +223,6 @@ class Form_Message extends \Form {
 
         $this->from_type_field->set($from_type);
 
-    }
-
-    public function checkSubmit() {
-
-//        var_dump($_POST); echo '<hr>';
-//
-//
-//        echo 'checkSubmit <br>';
-//        var_dump($this->get()); echo '<hr>';
-//
-//        $this->model->set($this->get());
-//
-//        var_dump($this->model->get()); echo '<hr>';
-//
-
-//        exit('bla');
-
-
-//        if ($this->hasElement('id')) {
-//            $this->set('id',$_GET[$this->owner->name.'_id']);
-//        }
-
-
-        $this->model->set($this->get());
-        $this->save();
-
-//        $succss_js = array(
-//            $this->js()->univ()->successMessage($this->success_message),
-//            $this->js()->_selector('#'.$this->crud->name)->trigger('reload'),
-//        );
-//
-//        $this->js(null,$succss_js)->univ()->closeDialog()->execute();
     }
 
 }
