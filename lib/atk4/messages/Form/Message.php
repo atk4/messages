@@ -66,7 +66,7 @@ class Form_Message extends \Form {
         if ($actual_fields && ($key = array_search('to_id', $actual_fields)) !== false) {
             $this->to_id_field = $this->addToField();
             $to_field_assotiations['to_id'] = $model->getElement('to_id');
-            /*if (!$_POST['ajax_submit']=='form_submit')*/ unset($actual_fields[$key]);
+            unset($actual_fields[$key]);
         }
 
         // add reload
@@ -78,14 +78,14 @@ class Form_Message extends \Form {
         if ($actual_fields && ($key = array_search('from_type', $actual_fields)) !== false) {
             $this->from_type_field = $this->addFromTypeField();
             $to_field_assotiations['from_type'] = $model->getElement('from_type');
-            /*if (!$_POST['ajax_submit']=='form_submit')*/ unset($actual_fields[$key]);
+            unset($actual_fields[$key]);
         }
 
         // from autocomplete
         if ($actual_fields && ($key = array_search('from_id', $actual_fields)) !== false) {
             $this->from_id_field = $this->addFromField();
             $to_field_assotiations['from_id'] = $model->getElement('from_id');
-            /*if (!$_POST['ajax_submit']=='form_submit')*/ unset($actual_fields[$key]);
+            unset($actual_fields[$key]);
         }
 
         // add reload
@@ -106,11 +106,6 @@ class Form_Message extends \Form {
         foreach ($to_field_assotiations as $ff => $mf) {
             $this->controller->field_associations[$ff] = $mf;
         }
-
-//        foreach ($this->controller->field_associations as $ff => $mf) {
-//            echo '+++--->>> '. $ff . '<br>';
-//        }
-
 
         // return model (required if form are in CRUD)
         return $this->model;
@@ -138,6 +133,7 @@ class Form_Message extends \Form {
      */
     private function addToField() {
         $field = $this->addField('autocomplete\Form_Field_Basic','to_id')->setCaption('To');
+        $field->setTitleField('name');
         return $field;
     }
 
@@ -162,6 +158,7 @@ class Form_Message extends \Form {
      */
     private function addFromField() {
         $field = $this->addField('autocomplete\Form_Field_Basic','from_id')->setCaption('From');
+        $field->setTitleField('name');
         return $field;
     }
 
