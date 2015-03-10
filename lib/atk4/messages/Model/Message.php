@@ -46,6 +46,9 @@ class Model_Message extends \SQL_Model {
 
     function addHooks() {
         $this->addHook('beforeSave',function($m){
+            //echo 'Model_Message::beforeSave<br>';
+            //var_dump($m->get()); echo '<hr>';
+            //var_dump($this->get()); echo '<hr>';
             if (!$m['to_type']) throw new \Exception_ValidityCheck('required','to_type');
             if ( $this->config->getTypeModelClassName($m['to_type']) && !$m['to_id'] ) throw new \Exception_ValidityCheck('required','to_id');
             if (!$m['from_type']) throw new \Exception_ValidityCheck('required','from_type');

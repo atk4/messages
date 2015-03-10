@@ -48,6 +48,8 @@ class Form_Message extends \Form {
 
     public function setModel($model, $actual_fields = UNDEFINED) {
 
+        $to_field_assotiations = [];
+
         //  get field list form model if no fields provided
         if (!$actual_fields) {
             $actual_fields = $model->getActualFields();
@@ -56,13 +58,15 @@ class Form_Message extends \Form {
         // to type drop down
         if ($actual_fields && ($key = array_search('to_type', $actual_fields)) !== false) {
             $this->to_type_field = $this->addToTypeField();
-            unset($actual_fields[$key]);
+            $to_field_assotiations['to_type'] = $model->getElement('to_type');
+            /*if (!$_POST['ajax_submit']=='form_submit')*/ unset($actual_fields[$key]);
         }
 
         // to autocomplete
         if ($actual_fields && ($key = array_search('to_id', $actual_fields)) !== false) {
             $this->to_id_field = $this->addToField();
-            unset($actual_fields[$key]);
+            $to_field_assotiations['to_id'] = $model->getElement('to_id');
+            /*if (!$_POST['ajax_submit']=='form_submit')*/ unset($actual_fields[$key]);
         }
 
         // add reload
@@ -73,13 +77,15 @@ class Form_Message extends \Form {
         // from type drop down
         if ($actual_fields && ($key = array_search('from_type', $actual_fields)) !== false) {
             $this->from_type_field = $this->addFromTypeField();
-            unset($actual_fields[$key]);
+            $to_field_assotiations['from_type'] = $model->getElement('from_type');
+            /*if (!$_POST['ajax_submit']=='form_submit')*/ unset($actual_fields[$key]);
         }
 
         // from autocomplete
         if ($actual_fields && ($key = array_search('from_id', $actual_fields)) !== false) {
             $this->from_id_field = $this->addFromField();
-            unset($actual_fields[$key]);
+            $to_field_assotiations['from_id'] = $model->getElement('from_id');
+            /*if (!$_POST['ajax_submit']=='form_submit')*/ unset($actual_fields[$key]);
         }
 
         // add reload
@@ -96,6 +102,15 @@ class Form_Message extends \Form {
 
         // there is no model hooks if form are in add mode but we still have to do something
         if ($this->crud && $this->crud->virtual_page->isActive() == 'add') $this->setValues();
+
+        foreach ($to_field_assotiations as $ff => $mf) {
+            $this->controller->field_associations[$ff] = $mf;
+        }
+
+//        foreach ($this->controller->field_associations as $ff => $mf) {
+//            echo '+++--->>> '. $ff . '<br>';
+//        }
+
 
         // return model (required if form are in CRUD)
         return $this->model;
