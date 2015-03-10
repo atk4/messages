@@ -48,8 +48,8 @@ class Model_Message extends \SQL_Model {
         $this->addHook('beforeSave',function($m){
             if (!$m['to_type']) throw new \Exception_ValidityCheck('required','to_type');
             if ( $this->config->getTypeModelClassName($m['to_type']) && !$m['to_id'] ) throw new \Exception_ValidityCheck('required','to_id');
-            if (!$m['from_id']) throw new \Exception_ValidityCheck('required','from_id');
             if (!$m['from_type']) throw new \Exception_ValidityCheck('required','from_type');
+            if ( $this->config->getTypeModelClassName($m['from_type']) && !$m['from_id'] ) throw new \Exception_ValidityCheck('required','from_id');
             if (!$m['text']) throw new \Exception_ValidityCheck('required','text');
             if (!array_key_exists($m['from_type'],static::getFromTypes())) new \Exception_ValidityCheck('Incorrect value','from_type');
             if (!array_key_exists($m['to_type'],static::getToTypes())) new \Exception_ValidityCheck('Incorrect value','to_type');
