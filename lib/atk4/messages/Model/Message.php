@@ -132,4 +132,20 @@ class Model_Message extends \SQL_Model {
         $this->save();
         return $this;
     }
+
+    /**
+     * This very helpful method checks if model->loaded() is satisfying expectation
+     *
+     * @param bool $loaded
+     * @return $this
+     * @throws \BaseException
+     */
+    protected function checkLoaded($loaded = true){
+        if($loaded && !$this->loaded()){
+            throw $this->exception(get_class($this) . ' must be loaded','NotLoadedModel');
+        }else if (!$loaded && $this->loaded()){
+            throw $this->exception(get_class($this) . ' must not be loaded','LoadedModel');
+        }
+        return $this;
+    }
 }
